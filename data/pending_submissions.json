@@ -1,0 +1,42 @@
+[
+  {
+    "texto": "Nueva frase",
+    "autor": "Tester",
+    "categoria": "pruebas",
+    "fuente_url": null,
+    "licencia": null,
+    "id": "48bfa0e0-bf00-4283-a708-99e26be244e2"
+  },
+  {
+    "texto": "Otra frase",
+    "autor": "Tester2",
+    "categoria": "pruebas",
+    "fuente_url": null,
+    "licencia": null,
+    "id": "cb5c45ab-0293-4d8d-a2cf-6cfcbf76026f"
+  },
+  {
+    "texto": "Nueva frase",
+    "autor": "Tester",
+    "categoria": "pruebas",
+    "fuente_url": null,
+    "licencia": null,
+    "id": "1943a9dc-4a8b-48e3-9750-5c4c514f5dec"
+  },
+  {
+    "texto": "Nueva frase",
+    "autor": "Tester",
+    "categoria": "pruebas",
+    "fuente_url": null,
+    "licencia": null,
+    "id": "6fd253f1-36b5-44fb-9b38-1ed05f6cb608"
+  },
+  {
+    "texto": "Nueva frase",
+    "autor": "Tester",
+    "categoria": "pruebas",
+    "fuente_url": null,
+    "licencia": null,
+    "id": "12a3f9a9-2039-4010-a5dd-0c3d95b84c59"
+  }
+]
