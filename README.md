@@ -1,4 +1,5 @@
 [![CI](https://github.com/CoderDeltaLAN/quip-api-es/actions/workflows/ci.yml/badge.svg)](https://github.com/CoderDeltaLAN/quip-api-es/actions/workflows/ci.yml)
+[![CI](https://github.com/CoderDeltaLAN/quip-api-es/actions/workflows/ci.yml/badge.svg)](https://github.com/CoderDeltaLAN/quip-api-es/actions/workflows/ci.yml)
 cat > /home/user/Proyectos/quip-api-es/README.md << 'EOF'
 # quip-api-es
 
