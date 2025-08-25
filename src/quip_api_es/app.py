@@ -9,7 +9,7 @@ import orjson
 from dotenv import load_dotenv
 from fastapi import FastAPI, Header, HTTPException, Query, status
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
+from fastapi.responses import JSONResponse, RedirectResponse
 from pydantic import BaseModel
 
 from .model import Quote
@@ -96,37 +96,6 @@ def categories():
 
 
 # 📩 Submit
-@app.post("/submit", summary="Recibir texto", status_code=200)
-def submit(
-    quote: SubmitPayload,
-    authorization: str | None = Header(
-        default=None, convert_underscores=False, alias="Authorization"
-    ),
-):
-    # 1) Autorización
-    if not _auth_ok(authorization):
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="unauthorized")
-    # 2) Persistencia en JSON
-    try:
-        path = _Path(os.getenv("PENDING_PATH", "data/pending_submissions.json"))
-        items = []
-        if path.exists():
-            raw = path.read_text(encoding="utf-8") or "[]"
-            items = json.loads(raw)
-            if not isinstance(items, list):
-                items = []
-        entry = quote.model_dump()
-        entry["id"] = str(uuid.uuid4())
-        items.append(entry)
-        path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_text(json.dumps(items, ensure_ascii=False, indent=2), encoding="utf-8")
-        return {"ok": True}
-    except HTTPException:
-        raise
-    except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail=f"persistencia fallo: {e}"
-        )
 
 
 @app.get("/", include_in_schema=False)
@@ -297,8 +266,8 @@ def _auth_ok(authorization: str | None) -> bool:
     return got == TOKEN
     got = authorization.split(" ", 1)[1].strip()
     return got == TOKEN
-
-    from fastapi import HTTPException, status
+    got = authorization.split(" ", 1)[1].strip()
+    return got == TOKEN
 
     if not _auth_ok(authorization):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="unauthorized")
@@ -332,3 +301,40 @@ class SubmitPayload(BaseModel):
     texto: str
     autor: str | None = None
     categoria: str | None = None
+
+
+@app.post("/submit", summary="Recibir texto", status_code=200)
+def submit(
+    quote: SubmitPayload,
+    authorization: str | None = Header(
+        default=None, convert_underscores=False, alias="Authorization"
+    ),
+):
+    # 1) Autorización
+    if not _auth_ok(authorization):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="unauthorized",
+        )
+    # 2) Persistencia en JSON
+    try:
+        path = _Path(os.getenv("PENDING_PATH", "data/pending_submissions.json"))
+        items = []
+        if path.exists():
+            raw = path.read_text(encoding="utf-8") or "[]"
+            items = json.loads(raw)
+            if not isinstance(items, list):
+                items = []
+        entry = quote.model_dump()
+        entry["id"] = str(uuid.uuid4())
+        items.append(entry)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(json.dumps(items, ensure_ascii=False, indent=2), encoding="utf-8")
+        return {"ok": True}
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail=f"persistencia fallo: {e}",
+        )
