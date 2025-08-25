@@ -9,7 +9,7 @@ import orjson
 from dotenv import load_dotenv
 from fastapi import FastAPI, Header, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
+from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
@@ -270,6 +270,8 @@ except NameError:
     from fastapi import FastAPI
 
     app = FastAPI(title="quip-api-es")  # fallback por si el módulo no la define
+
+from fastapi.responses import JSONResponse, RedirectResponse
 
 
 def _route_exists(path: str, method: str = "GET") -> bool:
