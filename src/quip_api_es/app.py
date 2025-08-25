@@ -3,13 +3,13 @@ import os
 import random
 import uuid
 from pathlib import Path
+from pathlib import Path as _Path
 
 import orjson
 from dotenv import load_dotenv
-from fastapi import FastAPI, Header, HTTPException, Query
+from fastapi import FastAPI, Header, HTTPException, Query, status
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
-from fastapi.staticfiles import StaticFiles
+from fastapi.responses import JSONResponse, RedirectResponse
 from pydantic import BaseModel
 
 from .model import Quote
@@ -98,39 +98,41 @@ def categories():
 # 📩 Submit
 @app.post("/submit", summary="Recibir texto", status_code=200)
 def submit(
-    payload: dict,
+    quote: SubmitPayload,
     authorization: str | None = Header(
         default=None, convert_underscores=False, alias="Authorization"
     ),
 ):
-    if not SUBMIT_TOKEN:
-        raise HTTPException(status_code=500, detail="SUBMIT_TOKEN no configurado")
-    if authorization != f"Bearer {SUBMIT_TOKEN}":
-        raise HTTPException(status_code=401, detail="Unauthorized")
-
-    storage = Path(__file__).resolve().parents[2] / "data" / "pending_submissions.json"
+    # 1) Autorización
+    if not _auth_ok(authorization):
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="unauthorized")
+    # 2) Persistencia en JSON (lista)
     try:
-        pending = json.loads(storage.read_text(encoding="utf-8"))
-    except Exception:
-        pending = []
+        path = _Path(os.getenv("PENDING_PATH", "data/pending_submissions.json"))
+        items = []
+        if path.exists():
+            raw = path.read_text(encoding="utf-8") or "[]"
+            items = json.loads(raw)
+            if not isinstance(items, list):
+                items = []
+        entry = quote.model_dump()
+        entry["id"] = str(uuid.uuid4())
+        items.append(entry)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(json.dumps(items, ensure_ascii=False, indent=2), encoding="utf-8")
+        return {"ok": True}
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail=f"persistencia fallo: {e}",
+        )
 
-    entry = quote.model_dump()
-    entry["id"] = str(uuid.uuid4())
-    pending.append(entry)
-    storage.write_text(json.dumps(pending, ensure_ascii=False, indent=2), encoding="utf-8")
 
-    return {"status": "pending", "id": entry["id"]}
+get("/docs", include_in_schema=False)
 
 
-# 🌌 Archivos estáticos (canvas y CSS)
-STATIC_DIR = Path(__file__).resolve().parent / "static"
-app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
-
-
-# 📑 Swagger UI personalizado con fondo canvas + tema oscuro
-
-
-@app.get("/docs", include_in_schema=False)
 def custom_docs():
     from datetime import datetime as _dt
 
@@ -337,12 +339,12 @@ if not _route_exists("/healthz", "GET"):
 
 # --- END PATCH ---
 
-from fastapi import Header
-
 
 def _auth_ok(authorization: str | None) -> bool:
     if not authorization or not authorization.startswith("Bearer "):
         return False
+    got = authorization.split(" ", 1)[1].strip()
+    return got == TOKEN
     got = authorization.split(" ", 1)[1].strip()
     return got == TOKEN
 
@@ -375,3 +377,9 @@ def _auth_ok(authorization: str | None) -> bool:
         raise HTTPException(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail=f"persistencia falló: {e}"
         )
+
+
+class SubmitPayload(BaseModel):
+    texto: str
+    autor: str | None = None
+    categoria: str | None = None
