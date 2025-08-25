@@ -25,3 +25,8 @@ build/
 
 # Node (si aplica)
 node_modules/
+
+# Backups locales
+*.bak
+*.bak.*
+*~ 
