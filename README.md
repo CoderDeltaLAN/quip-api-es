@@ -23,3 +23,5 @@ poetry run uvicorn quip_api_es.app:app --reload
 # 3) Abrir documentación
 # http://127.0.0.1:8000/docs
 
+
+[![CI](https://github.com/CoderDeltaLAN/quip-api-es/actions/workflows/ci.yml/badge.svg)](https://github.com/CoderDeltaLAN/quip-api-es/actions/workflows/ci.yml)
