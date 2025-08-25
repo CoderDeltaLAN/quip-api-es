@@ -1,0 +1,43 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+.eggs/
+.venv/
+.env
+.env.*
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Build / dist
+dist/
+build/
+
+# IDE / OS
+.idea/
+.vscode/
+*.code-workspace
+.DS_Store
+Thumbs.db
+
+# Node (por si usas tooling JS)
+node_modules/
+
+# Backups locales
+*.bak
+*.bak.*
+*~
+# Archivos sueltos no deseados
+*.swp
+*.swo
+
+# Datos/artefactos que no son código
+data/
+datasets/
+outputs/
+tmp/
