@@ -301,3 +301,39 @@ if not _route_exists("/healthz", "GET"):
 
 
 # --- END PATCH ---
+# --- PATCH: rutas raíz y healthz (idempotente) ---
+try:
+    app  # noqa: F821  # usar instancia existente creada en este módulo
+except NameError:
+    from fastapi import FastAPI
+
+    app = FastAPI(title="quip-api-es")  # fallback por si el módulo no la define
+
+
+def _route_exists(path: str, method: str = "GET") -> bool:
+    try:
+        return any(
+            getattr(r, "path", None) == path and method in getattr(r, "methods", set())
+            for r in app.router.routes
+        )
+    except Exception:
+        return False
+
+
+# '/' -> '/docs'
+if not _route_exists("/", "GET"):
+
+    @app.get("/", include_in_schema=False)
+    def _root_redirect():
+        return RedirectResponse(url="/docs", status_code=307)
+
+
+# '/healthz' -> 200 {"status":"ok"}
+if not _route_exists("/healthz", "GET"):
+
+    @app.get("/healthz", summary="Liveness/Readiness")
+    def _healthz():
+        return JSONResponse({"status": "ok"})
+
+
+# --- END PATCH ---
