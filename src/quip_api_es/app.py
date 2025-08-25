@@ -9,7 +9,7 @@ import orjson
 from dotenv import load_dotenv
 from fastapi import FastAPI, Header, HTTPException, Query, status
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse, RedirectResponse
+from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
 from pydantic import BaseModel
 
 from .model import Quote
@@ -106,7 +106,7 @@ def submit(
     # 1) Autorización
     if not _auth_ok(authorization):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="unauthorized")
-    # 2) Persistencia en JSON (lista)
+    # 2) Persistencia en JSON
     try:
         path = _Path(os.getenv("PENDING_PATH", "data/pending_submissions.json"))
         items = []
@@ -125,60 +125,8 @@ def submit(
         raise
     except Exception as e:
         raise HTTPException(
-            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-            detail=f"persistencia fallo: {e}",
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail=f"persistencia fallo: {e}"
         )
-
-
-get("/docs", include_in_schema=False)
-
-
-def custom_docs():
-    from datetime import datetime as _dt
-
-    v = app.version
-    copytxt = os.getenv("COPYRIGHT") or f"© {_dt.now().year} quip-api-es"
-    HTML = """<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>quip-api-es — API Docs</title>
-  <link rel="icon" href="/static/favicon.svg?v=__V__">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swagger-ui-dist/swagger-ui.css"/>
-  <link rel="stylesheet" href="/static/swagger-dark.css?v=__V__"/>
-  <link rel="stylesheet" href="/static/canvas-bg.css?v=__V__"/>
-  <style>
-    .copy-badge{
-      position:fixed; left:16px; bottom:16px; z-index:9999;
-      background:#0b1220; color:#e5e7eb; border:1px solid #1f2937;
-      border-radius:10px; padding:6px 10px; font-weight:600;
-      box-shadow:0 10px 30px rgba(2,6,23,.35)
-    }
-  </style>
-</head>
-<body>
-  <canvas id="bg"></canvas>
-  <div class="copy-badge">__COPY__</div>
-  <div id="swagger-ui"></div>
-  <script src="https://cdn.jsdelivr.net/npm/swagger-ui-dist/swagger-ui-bundle.js"></script>
-  <script>
-    window.ui = SwaggerUIBundle({
-      url: '__OPENAPI_URL__',
-      dom_id: '#swagger-ui',
-      layout: 'BaseLayout'
-    });
-  </script>
-  <script src="/static/canvas-bg.js?v=__V__"></script>
-  <script src="/static/docs-helpers.js?v=__V__"></script>
-</body>
-</html>"""
-    html = (
-        HTML.replace("__OPENAPI_URL__", app.openapi_url)
-        .replace("__V__", v)
-        .replace("__COPY__", copytxt)
-    )
-    return HTMLResponse(content=html)
 
 
 @app.get("/", include_in_schema=False)
@@ -347,6 +295,8 @@ def _auth_ok(authorization: str | None) -> bool:
     return got == TOKEN
     got = authorization.split(" ", 1)[1].strip()
     return got == TOKEN
+    got = authorization.split(" ", 1)[1].strip()
+    return got == TOKEN
 
     from fastapi import HTTPException, status
 
@@ -357,8 +307,7 @@ def _auth_ok(authorization: str | None) -> bool:
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail="campo 'texto' requerido"
         )
     try:
-        import json
-        import os
+
         from pathlib import Path
 
         path = Path(os.getenv("PENDING_PATH", "data/pending_submissions.json"))
