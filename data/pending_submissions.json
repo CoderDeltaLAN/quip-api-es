@@ -78,5 +78,29 @@
     "fuente_url": null,
     "licencia": null,
     "id": "557c28a5-7836-40c8-89be-0ecf3b84ff2f"
+  },
+  {
+    "texto": "Nueva frase",
+    "autor": "Tester",
+    "categoria": "pruebas",
+    "fuente_url": null,
+    "licencia": null,
+    "id": "0c0388c2-f391-4e23-a364-80d945856ad8"
+  },
+  {
+    "texto": "Nueva frase",
+    "autor": "Tester",
+    "categoria": "pruebas",
+    "fuente_url": null,
+    "licencia": null,
+    "id": "99a35ca1-59bd-4384-a78b-04bab71ee0ac"
+  },
+  {
+    "texto": "Nueva frase",
+    "autor": "Tester",
+    "categoria": "pruebas",
+    "fuente_url": null,
+    "licencia": null,
+    "id": "fd5e5797-def4-4242-a8f8-ae201f39d617"
   }
 ]
