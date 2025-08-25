@@ -3,7 +3,6 @@ import os
 import random
 import uuid
 from pathlib import Path
-from typing import Annotated
 
 import orjson
 from dotenv import load_dotenv
@@ -97,10 +96,12 @@ def categories():
 
 
 # 📩 Submit
-@app.post("/submit")
+@app.post("/submit", summary="Recibir texto", status_code=200)
 def submit(
-    quote: QuoteSubmission,
-    authorization: Annotated[str | None, Header(alias="Authorization")] = None,
+    payload: dict,
+    authorization: str | None = Header(
+        default=None, convert_underscores=False, alias="Authorization"
+    ),
 ):
     if not SUBMIT_TOKEN:
         raise HTTPException(status_code=500, detail="SUBMIT_TOKEN no configurado")
@@ -335,3 +336,42 @@ if not _route_exists("/healthz", "GET"):
 
 
 # --- END PATCH ---
+
+from fastapi import Header
+
+
+def _auth_ok(authorization: str | None) -> bool:
+    if not authorization or not authorization.startswith("Bearer "):
+        return False
+    got = authorization.split(" ", 1)[1].strip()
+    return got == TOKEN
+
+    from fastapi import HTTPException, status
+
+    if not _auth_ok(authorization):
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="unauthorized")
+    if not isinstance(payload, dict) or "texto" not in payload:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail="campo 'texto' requerido"
+        )
+    try:
+        import json
+        import os
+        from pathlib import Path
+
+        path = Path(os.getenv("PENDING_PATH", "data/pending_submissions.json"))
+        items = []
+        if path.exists():
+            items = json.loads(path.read_text(encoding="utf-8") or "[]")
+            if not isinstance(items, list):
+                items = []
+        items.append(payload)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(json.dumps(items, ensure_ascii=False, indent=2), encoding="utf-8")
+        return {"ok": True}
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail=f"persistencia falló: {e}"
+        )
