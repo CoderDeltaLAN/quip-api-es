@@ -65,7 +65,7 @@ def submit(
         items.append(entry)
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(json.dumps(items, ensure_ascii=False, indent=2), encoding="utf-8")
-        return {"ok": True, "status": "pending"}
+        return {"ok": True, "status": "pending", "id": entry["id"]}
     except HTTPException:
         raise
     except Exception as e:
@@ -107,8 +107,17 @@ def health():
 
 @app.get("/stats", summary="Stats básicas")
 def stats():
-    # Valores dummy suficientes para tests
-    return {"total": 0, "categories": 0}
+    quotes = _load_quotes()
+    total_frases = len(quotes)
+    autores_unicos = len({(q.get("autor") or "").strip() for q in quotes if q.get("autor")})
+    categorias_unicas = len(
+        {(q.get("categoria") or "").strip() for q in quotes if q.get("categoria")}
+    )
+    return {
+        "total_frases": total_frases,
+        "autores_unicos": autores_unicos,
+        "categorias_unicas": categorias_unicas,
+    }
 
 
 @app.get("/categories", summary="Listado de categorías")
@@ -120,3 +129,22 @@ def categories():
 def search(q: str = Query(..., min_length=2)):
     # Implementación mínima para tests: devolver estructura válida
     return {"query": q, "results": []}
+
+
+# === Helpers de datos ===
+def _data_path(name: str) -> Path:
+    # Permite override con QUOTES_PATH en tests si hiciera falta
+    base = Path("data")
+    return base / name
+
+
+def _load_quotes() -> list:
+    path = Path(os.getenv("QUOTES_PATH", str(_data_path("quotes.json"))))
+    if not path.exists():
+        return []
+    try:
+        raw = path.read_text(encoding="utf-8") or "[]"
+        data = json.loads(raw)
+        return data if isinstance(data, list) else []
+    except Exception:
+        return []
