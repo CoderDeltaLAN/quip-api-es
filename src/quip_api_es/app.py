@@ -1,7 +1,17 @@
 from __future__ import annotations
 
+# Safety net: garantiza Path en runtime
+if "Path" not in globals():
+    from pathlib import Path  # noqa: F401
+
+
 import json
 import os
+from pathlib import Path
+
+# Safety net: asegura Path disponible en runtime
+if "Path" not in globals():
+    from pathlib import Path  # noqa: F401
 import uuid
 from pathlib import Path as _Path
 
@@ -150,3 +160,34 @@ def _load_quotes() -> list:
         return data if isinstance(data, list) else []
     except Exception:
         return []
+
+
+@app.get("/health", summary="Health (tests)")
+def health():
+    return {"status": "ok", "count": len(_load_quotes())}
+
+
+# --- Ruta /health canónica y única (auto-normalizada) ---
+def _set_health_route() -> None:
+    try:
+        app.router.routes = [
+            r
+            for r in app.router.routes
+            if not (getattr(r, "path", None) == "/health" and "GET" in getattr(r, "methods", set()))
+        ]
+    except Exception:
+        # Si no se puede limpiar, seguimos igualmente añadiendo el handler
+        pass
+
+    def _health_handler():
+        return {"status": "ok", "count": len(_load_quotes())}
+
+    app.add_api_route(
+        "/health",
+        _health_handler,
+        methods=["GET"],
+        summary="Health (tests)",
+    )
+
+
+_set_health_route()

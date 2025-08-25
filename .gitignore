@@ -1,1 +1,27 @@
-src/quip_api_es/app.py.bak.*
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+.eggs/
+.venv/
+.env
+.env.*
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Build
+dist/
+build/
+
+# Editors/OS
+.idea/
+.vscode/
+.DS_Store
+
+# Node (si aplica)
+node_modules/
