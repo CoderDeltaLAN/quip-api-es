@@ -113,10 +113,6 @@ if not _route_exists("/healthz", "GET"):
 
 
 @app.get("/health", summary="Health (tests)")
-def health():
-    return {"status": "ok"}
-
-
 @app.get("/stats", summary="Stats básicas")
 def stats():
     quotes = _load_quotes()
@@ -163,11 +159,6 @@ def _load_quotes() -> list:
 
 
 @app.get("/health", summary="Health (tests)")
-def health():
-    return {"status": "ok", "count": len(_load_quotes())}
-
-
-# --- Ruta /health canónica y única (auto-normalizada) ---
 def _set_health_route() -> None:
     try:
         app.router.routes = [
@@ -191,3 +182,8 @@ def _set_health_route() -> None:
 
 
 _set_health_route()
+
+
+@app.get("/health", summary="Health (tests)")
+def health():
+    return {"status": "ok", "count": len(_load_quotes())}
