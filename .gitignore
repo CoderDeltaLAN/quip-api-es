@@ -1,0 +1,12 @@
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.build/
+dist/
+.coverage
+.pytest_cache/
+.mypy_cache/
+*.log
+raw_pins/

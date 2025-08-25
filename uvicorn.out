@@ -1,0 +1,8 @@
+nohup: no se tendrá en cuenta la entrada
+INFO:     Started server process [127430]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+ERROR:    [Errno 98] error while attempting to bind on address ('127.0.0.1INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [127340]

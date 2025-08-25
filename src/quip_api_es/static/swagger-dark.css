@@ -1,637 +1,201 @@
 :root{
-  --bg:#0b1220;          /* fondo */
-  --card:#0f172a;        /* paneles/opblocks */
-  --muted:#94a3b8;       /* texto secundario */
-  --text:#e2e8f0;        /* texto principal */
-  --border:#1e293b;      /* líneas/bordes */
-  --accent:#22d3ee;      /* cian */
-  --get:#3b82f6;         /* azul */
-  --post:#10b981;        /* verde */
-  --put:#f59e0b;         /* ámbar */
-  --del:#ef4444;         /* rojo */
+  --bg:#0b1120;
+  --panel:transparent;            /* sin ladrillos */
+  --stroke:#0ea5b7;               /* cian para bordes */
+  --txt:#e6f6ff;                  /* texto más intenso */
+  --muted:#9cc2d1;                /* ayudas */
+  --primary:#22d3ee;              /* GET */
+  --success:#34d399;              /* POST */
 }
 
-/* Fondo general + tipografía */
-html,body{ background:var(--bg) !important; color:var(--text) !important; }
-.swagger-ui, .swagger-ui .topbar{ background:transparent !important; }
-.swagger-ui, .swagger-ui *{ color:var(--text); }
-.swagger-ui a{ color:var(--accent); }
+html,body{background:var(--bg);color:var(--txt);}
+.swagger-ui{color:var(--txt);}
 
-/* Tarjetas / opblocks */
-.swagger-ui .opblock{
-  background:var(--card) !important;
-  border:1px solid var(--border) !important;
-  border-radius:12px !important;
-}
-.swagger-ui .opblock .opblock-summary{
-  background:rgba(255,255,255,0.02) !important;
-  border-bottom:1px solid var(--border) !important;
-  border-radius:12px !important;
-}
-.swagger-ui .opblock .opblock-section{
-  background:var(--card) !important;
-  border:1px solid var(--border) !important;
-  border-radius:10px !important;
-}
-.swagger-ui .opblock .opblock-section-header{
-  background:rgba(2,6,23,.6) !important;
-  border-bottom:1px solid var(--border) !important;
-}
-
-/* Colores por método (píldora de la izquierda) */
-.swagger-ui .opblock-get .opblock-summary-method{ background:var(--get) !important; }
-.swagger-ui .opblock-post .opblock-summary-method{ background:var(--post) !important; }
-.swagger-ui .opblock-put  .opblock-summary-method{ background:var(--put) !important; }
-.swagger-ui .opblock-delete .opblock-summary-method{ background:var(--del) !important; }
-
-/* Botones (Try it out, Execute, etc.) */
-.swagger-ui .btn{
-  background:#0b1220 !important; color:#e2e8f0 !important;
-  border:1px solid var(--border) !important; border-radius:10px !important;
-}
-.swagger-ui .btn:hover{ filter:brightness(1.08); }
-.swagger-ui .btn.try-out__btn{ background:var(--get) !important; border:none !important; }
-.swagger-ui .btn.execute{ background:var(--post) !important; border:none !important; }
-.swagger-ui .btn.cancel, .swagger-ui .btn-clear{ background:#0b1220 !important; }
-
-/* Inputs, selects, textareas */
-.swagger-ui input, .swagger-ui textarea, .swagger-ui select{
-  background:#111827 !important; border:1px solid #374151 !important;
-  color:#e5e7eb !important; border-radius:8px !important;
-}
-.swagger-ui input::placeholder, .swagger-ui textarea::placeholder{ color:#9aa4b2 !important; }
-.swagger-ui .parameters-col_description input{ background:#0b1220 !important; }
-
-/* Tablas (headers, celdas, líneas) */
-.swagger-ui table thead tr{ background:rgba(2,6,23,.5) !important; }
-.swagger-ui table, .swagger-ui td, .swagger-ui th{ border-color:var(--border) !important; }
-.swagger-ui .response-content-type .content-type{
-  background:#0b1220 !important; border:1px solid var(--border) !important; color:#cbd5e1 !important;
-}
-
-/* Código y JSON */
-.swagger-ui pre, .swagger-ui code, .swagger-ui .microlight{
-  background:#0b1220 !important; color:#e2e8f0 !important;
-  border:1px solid var(--border) !important; border-radius:10px !important;
-}
-
-/* Etiquetas de grupo y resúmenes */
-.swagger-ui .opblock-tag{ color:#e5e7eb !important; border-bottom:1px dashed var(--border) !important; }
-.swagger-ui .opblock-summary{ border:1px solid var(--border) !important; }
-
-/* ---- MODELS / SCHEMAS (la parte “de abajo”) ---- */
-.swagger-ui section.models{ border-top:1px solid var(--border) !important; }
-.swagger-ui section.models h4, .swagger-ui .models-control{
-  background:var(--card) !important; color:var(--text) !important;
-  border:1px solid var(--border) !important; border-radius:12px !important;
-}
-
-/* Caja de cada modelo */
-.swagger-ui .model-box{
-  background:var(--card) !important;
-  border:1px solid var(--border) !important; border-radius:12px !important;
-  color:var(--text) !important;
-}
-
-/* Cabecera del modelo (título + chip “object”) */
-.swagger-ui .model-title, .swagger-ui .model-title span{
-  color:var(--accent) !important; font-weight:600 !important;
-}
-.swagger-ui .model-box .model-title, .swagger-ui .model-box .model-title *{
-  background:transparent !important;
-}
-.swagger-ui .model .model-title__badges span,
-.swagger-ui .model .model-title__type,
-.swagger-ui .model .model-title__example{
-  background:#0b1220 !important; color:#cbd5e1 !important;
-  border:1px solid var(--border) !important; border-radius:8px !important;
-}
-
-/* Propiedades dentro del modelo */
-.swagger-ui .prop-name{ color:#a5b4fc !important; font-weight:500 !important; }
-.swagger-ui .prop-type{ color:#38bdf8 !important; }
-
-/* Toggle del modelo (flecha) más visible */
-.swagger-ui .model-toggle{ filter:brightness(1.2) saturate(1.1); }
-
-/* Hover suaves */
-.swagger-ui .opblock:hover,
-.swagger-ui .model-box:hover{
-  box-shadow:0 0 12px rgba(34,211,238,0.28);
-  transition:box-shadow .25s ease;
-}
-
-/* Scrollbars */
-::-webkit-scrollbar{ width:8px; height:8px; }
-::-webkit-scrollbar-track{ background:transparent; }
-::-webkit-scrollbar-thumb{ background:#475569; border-radius:4px; }
-::-webkit-scrollbar-thumb:hover{ background:var(--accent); }
-/* === Schemas: contenedor y cabecera ================================ */
-.swagger-ui section.models{
-  background: linear-gradient(180deg,#0f172a 0%,#0b1220 100%) !important;
-  border: 1px solid #1e293b !important;
-  border-radius: 12px !important;
-  margin-top: 16px !important;
-}
-.swagger-ui section.models .models-title{
-  color: #e2e8f0 !important;
-  padding: 12px 16px !important;
-  margin: 0 !important;
-  border-bottom: 1px solid #1f2a3a !important;
-  background: rgba(2,6,23,.6) !important;
-  letter-spacing: .2px;
-  font-weight: 600 !important;
-}
-.swagger-ui section.models .models-control{
-  filter: brightness(1.15) saturate(1.1);
-}
-
-/* === Caja de cada modelo ========================================== */
-.swagger-ui .model-box{
-  background: #0b1220 !important;
-  border: 1px solid #203048 !important;
-  border-radius: 12px !important;
-  margin: 12px 16px !important;
-  padding: 12px !important;
-  box-shadow: inset 0 1px 0 rgba(34,211,238,.07);
-  color: #cbd5e1 !important;
-}
-.swagger-ui .model-box + .model-box{ margin-top: 12px !important; }
-
-/* Título del modelo + botón chevron */
-.swagger-ui .model-title,
-.swagger-ui .model-title span{
-  color: #e5e7eb !important;
-  font-weight: 600 !important;
-}
-.swagger-ui .model-toggle{
-  background: #0b1220 !important;
-  border: 1px solid #334155 !important;
-  color: #94a3b8 !important;
-  border-radius: 8px !important;
-}
-
-/* “Pills” tipo de modelo (object, array, etc.) */
-.swagger-ui .model-title small,
-.swagger-ui .model-title .model-title__type,
-.swagger-ui .model .model-type{
-  background: #0ea5e9 !important;
-  color: #0b1220 !important;
-  border: 1px solid #22d3ee !important;
-  border-radius: 999px !important;
-  padding: 2px 8px !important;
-  font-weight: 700 !important;
-}
-
-/* Filas/propiedades dentro del modelo */
-.swagger-ui .model .property-row{ border-top: 1px solid #1f2a3a !important; }
-.swagger-ui .model .property-row:first-child{ border-top: none !important; }
-.swagger-ui .prop-name{ color: #a5b4fc !important; font-weight: 600 !important; }
-.swagger-ui .prop-type{ color: #38bdf8 !important; }
-.swagger-ui .prop-format{ color: #7dd3fc !important; }
-.swagger-ui .prop-enum{ color: #22d3ee !important; }
-.swagger-ui .model .description{ color: #94a3b8 !important; }
-
-/* Código/ejemplos dentro de Schemas y Responses */
-.swagger-ui pre,
-.swagger-ui code,
-.swagger-ui .response-col_description pre{
-  background: #0b1220 !important;
-  color: #e5e7eb !important;
-  border: 1px solid #1e293b !important;
-  border-radius: 10px !important;
-}
-
-/* Botones (Try it out, Execute, etc.) */
-.swagger-ui .btn, .swagger-ui .btn.execute{
-  background: #0ea5e9 !important;
-  color: #0b1220 !important;
-  border: 1px solid #22d3ee !important;
-  border-radius: 10px !important;
-  font-weight: 700 !important;
-}
-.swagger-ui .btn.authorize{
-  background: #10b981 !important;
-  border-color: #34d399 !important;
-  color: #052e2b !important;
-}
-
-/* Colores de enlaces y detalles */
-.swagger-ui a{ color: #7dd3fc !important; }
-.swagger-ui a:hover{ color: #22d3ee !important; }
-
-/* Línea/borde más visible en los títulos de respuesta */
-.swagger-ui .opblock .opblock-section-header{
-  border-bottom: 1px solid #1f2a3a !important;
-}
-/* ===== Schemas panel (alineado con los GET/POST) ===== */
-.swagger-ui section.models { 
-  background: rgba(2,6,23,.35) !important;           /* #020617 con opacidad */
-  border: 1px solid #1e293b !important;              /* slate-800 */
-  border-radius: 12px !important;
-  backdrop-filter: blur(1px);
-}
-
-/* Contenedor de cada modelo */
-.swagger-ui .model-box {
-  position: relative;
-  background: #0b1220 !important;                    /* azul noche */
-  border: 1px solid #1e293b !important;
-  border-radius: 10px !important;
-  margin: 10px 12px !important;
-  padding: 10px 12px !important;
-}
-
-/* Acento izquierdo (como en los GET) */
-.swagger-ui .model-box::before{
-  content:"";
-  position:absolute; left:0; top:0; bottom:0; width:4px;
-  background: linear-gradient(180deg,#22d3ee,#06b6d4); /* celeste -> cian */
-  border-radius: 10px 0 0 10px;
-  opacity:.85;
-}
-
-/* Cabecera/título del modelo */
-.swagger-ui .model-box .model-title{
-  display:flex; align-items:center; gap:8px;
-  background: #0f172a !important;                    /* slate-900 */
-  border: 1px solid #1e293b !important;
-  border-radius: 8px !important;
-  padding: 8px 10px !important;
-  color: #e2e8f0 !important;                         /* slate-200 */
-  box-shadow: 0 2px 12px rgba(15,23,42,.35);
-}
-
-/* Texto del título y cualquier span dentro (pildas: Expand, object, etc.) */
-.swagger-ui .model-box .model-title > span,
-.swagger-ui .model-box .model-title span{
-  background: #0b1220 !important;
-  color: #cbd5e1 !important;                         /* slate-300 */
-  border: 1px solid #1e293b !important;
-  border-radius: 6px !important;
-  padding: 2px 8px !important;
-  line-height: 1.25 !important;
-}
-
-/* Botón/toggle de expandir modelo */
-.swagger-ui .model-box .model-toggle{
-  background: #0b1220 !important;
-  color: #e5e7eb !important;                         /* zinc-200 */
-  border: 1px solid #1e293b !important;
-  border-radius: 6px !important;
-  padding: 2px 8px !important;
-  cursor: pointer;
-  transition: filter .2s ease, box-shadow .2s ease;
-}
-.swagger-ui .model-box .model-toggle:hover{
-  filter: brightness(1.1);
-  box-shadow: 0 0 0 3px rgba(34,211,238,.12);
-}
-
-/* Tipos (object, string, etc.) en la cabecera */
-.swagger-ui .prop-type{
-  color: #38bdf8 !important;                         /* sky-400 */
-}
-
-/* Cuerpo del modelo (propiedades) */
-.swagger-ui .model-box .model{
-  background: transparent !important;
-  color: #e2e8f0 !important;
-  border-top: 1px dashed #1e293b !important;
-  margin-top: 8px !important;
-  padding-top: 8px !important;
-}
-
-/* Nombres de propiedades y divisores */
-.swagger-ui .prop-name{ color:#a5b4fc !important; }  /* indigo-300 */
-.swagger-ui .model .property{ border-color:#1e293b !important; }
-
-/* Scrollbar dentro de Schemas (consistente) */
-.swagger-ui section.models ::-webkit-scrollbar{ height:8px; width:8px; }
-.swagger-ui section.models ::-webkit-scrollbar-track{ background: transparent; }
-.swagger-ui section.models ::-webkit-scrollbar-thumb{ background:#475569; border-radius:4px; }
-.swagger-ui section.models ::-webkit-scrollbar-thumb:hover{ background:#22d3ee; }
-
-/* Etiqueta "Schemas" (barra de título) */
-.swagger-ui section.models > .models-control{
-  background: linear-gradient(180deg,#0b1220,#0a1020) !important;
-  border-bottom: 1px solid #1e293b !important;
-  color: #e2e8f0 !important;
-  padding: 8px 12px !important;
-  border-radius: 12px 12px 0 0 !important;
-}
-/* ===== Botón flotante Expandir/Colapsar (arriba dcha) ===== */
-#qa-expand-toggle{
-  background: linear-gradient(90deg,#06b6d4,#22d3ee) !important;
-  color:#0b1220 !important;
-  border:1px solid #0891b2 !important;
-  font-weight:700 !important;
-  text-shadow: 0 1px 0 rgba(255,255,255,.25);
-}
-
-/* ===== Contenedor de Schemas (mismo marco que los endpoints) ===== */
-.swagger-ui section.models{
-  background: rgba(2,6,23,.35) !important;    /* #020617 con opacidad */
-  border: 1px solid #1e293b !important;       /* slate-800 */
-  border-radius: 12px !important;
-}
-
-/* Barra de título “Schemas” */
-.swagger-ui section.models > .models-control{
-  background: linear-gradient(180deg,#0b1220,#0a1020) !important;
-  color: #e2e8f0 !important;
-  border: 1px solid #1e293b !important;
-  border-radius: 12px 12px 0 0 !important;
-  padding: 8px 12px !important;
-}
-
-/* Caja de cada modelo (acordeón) */
-.swagger-ui .model-box{
-  position:relative;
-  background:#0b1220 !important;
-  border:1px solid #1e293b !important;
-  border-radius:10px !important;
-  margin:10px 12px !important;
-  padding:10px 12px !important;
-}
-
-/* Acento lateral izquierdo como en GET */
-.swagger-ui .model-box::before{
-  content:"";
-  position:absolute; left:0; top:0; bottom:0; width:4px;
-  background: linear-gradient(180deg,#22d3ee,#06b6d4);
-  border-radius:10px 0 0 10px;
-  opacity:.85;
-}
-
-/* Cabecera del modelo */
-.swagger-ui .model-box .model-title{
-  display:flex; align-items:center; gap:8px;
-  background:#0f172a !important;
-  border:1px solid #1e293b !important;
-  border-radius:8px !important;
-  padding:8px 10px !important;
-  color:#e2e8f0 !important;
-  box-shadow:0 2px 12px rgba(15,23,42,.35);
-}
-
-/* Pills de cabecera (Expand, object, etc.) — mismas vibes que GET */
-.swagger-ui .model-box .model-title .model-toggle,
-.swagger-ui .model-box .model-title > span{
-  background: linear-gradient(90deg,#0ea5e9,#22d3ee) !important;
-  color:#0b1220 !important;
-  border:1px solid #0891b2 !important;
-  border-radius:6px !important;
-  padding:2px 8px !important;
-  font-weight:700 !important;
-  letter-spacing:.02em;
-}
-
-/* Si Swagger introduce otras pills, oscurecer por defecto */
-.swagger-ui .model-box .model-title .model-title__text,
-.swagger-ui .model-box .model-title .model-title__backref,
-.swagger-ui .model-box .model-title .model-title__badge{
-  background:#0b1220 !important;
-  color:#cbd5e1 !important;
-  border:1px solid #1e293b !important;
-  border-radius:6px !important;
-  padding:2px 8px !important;
-}
-
-/* Cuerpo del modelo + divisores más visibles */
-.swagger-ui .model-box .model{
-  background:transparent !important;
-  color:#e2e8f0 !important;
-  border-top:1px dashed #1e293b !important;
-  margin-top:8px !important; padding-top:8px !important;
-}
-.swagger-ui .model .property{ border-color:#1e293b !important; }
-
-/* Tipos y nombres dentro del modelo */
-.swagger-ui .prop-type{ color:#38bdf8 !important; }   /* sky-400 */
-.swagger-ui .prop-name{ color:#a5b4fc !important; }   /* indigo-300 */
-
-/* Chips internos (enum, default, format) en oscuro */
-.swagger-ui section.models .prop-format,
-.swagger-ui section.models .prop-enum,
-.swagger-ui section.models .prop-default{
-  background:#0b1220 !important; 
-  color:#cbd5e1 !important;
-  border:1px solid #1e293b !important; 
-  border-radius:6px !important;
-}
-
-/* Scrollbar consistente dentro de Schemas */
-.swagger-ui section.models ::-webkit-scrollbar{ width:8px; height:8px; }
-.swagger-ui section.models ::-webkit-scrollbar-track{ background:transparent; }
-.swagger-ui section.models ::-webkit-scrollbar-thumb{ background:#475569; border-radius:4px; }
-.swagger-ui section.models ::-webkit-scrollbar-thumb:hover{ background:#22d3ee; }
-/* ===== Botón flotante (arriba dcha) — texto más legible ===== */
-#qa-expand-toggle{
-  background: linear-gradient(90deg,#06b6d4,#22d3ee) !important;
-  color:#0b1220 !important;  /* negro */
-  border:1px solid #0891b2 !important;
-  font-weight:800 !important;
-  text-shadow: 0 1px 0 rgba(255,255,255,.25) !important;
-}
-
-/* ===== Schemas: contenedor con marco visible ===== */
-.swagger-ui section.models{
-  background: rgba(2,6,23,.45) !important;
-  border: 1px solid #334155 !important;     /* más contraste */
-  border-radius: 12px !important;
-}
-
-/* Título “Schemas” (barra) con contraste */
-.swagger-ui section.models > .models-control{
-  background: linear-gradient(180deg,#0b1220,#0a1020) !important;
-  color: #e5e7eb !important;
-  border: 1px solid #334155 !important;
-  border-radius: 12px 12px 0 0 !important;
-  padding: 8px 12px !important;
-}
-
-/* ===== Cada item de modelo: barra visible + glow sutil ===== */
-.swagger-ui .model-box{
-  position:relative;
-  background:#0b1220 !important;
-  border:1px solid #334155 !important;      /* más clara */
-  border-radius:10px !important;
-  margin:12px 12px !important;
-  padding:10px 12px !important;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.03),
-              0 0 0 1px rgba(34,211,238,.06);
-}
-
-/* Acento lateral como en GET */
-.swagger-ui .model-box::before{
-  content:"";
-  position:absolute; left:0; top:0; bottom:0; width:4px;
-  background: linear-gradient(180deg,#22d3ee,#06b6d4);
-  border-radius:10px 0 0 10px;
-  opacity:.9;
-}
-
-/* Cabecera del modelo */
-.swagger-ui .model-box .model-title{
-  display:flex; align-items:center; gap:8px;
-  background:#0f172a !important;
-  border:1px solid #334155 !important;
-  border-radius:8px !important;
-  padding:8px 10px !important;
-  color:#e2e8f0 !important;
-}
-
-/* ===== Píldoras de cabecera (Expand, object, etc.): fondo vivo + TEXTO NEGRO ===== */
-.swagger-ui section.models .model-box .model-title .model-toggle,
-.swagger-ui section.models .model-box .model-title .model-title__badge,
-.swagger-ui section.models .model-box .model-title .model-title__text > *:not(:first-child),
-.swagger-ui section.models .model-box .model-title > span,
-.swagger-ui section.models .model-box .model-title button{
-  background: linear-gradient(90deg,#22d3ee,#06b6d4) !important;
-  color:#0b1220 !important;                               /* NEGRO */
-  border:1px solid #0891b2 !important;
-  border-radius:6px !important;
-  padding:2px 8px !important;
-  font-weight:800 !important;
-  letter-spacing:.02em !important;
-  text-shadow: 0 1px 0 rgba(255,255,255,.25) !important;
-}
-/* por si algún sub-elemento hereda color blanco */
-.swagger-ui section.models .model-box .model-title button *,
-.swagger-ui section.models .model-box .model-title .model-toggle *,
-.swagger-ui section.models .model-box .model-title > span *{
-  color:#0b1220 !important;
-}
-
-/* Cuerpo del modelo + divisores visibles */
-.swagger-ui .model-box .model{
-  background:transparent !important;
-  color:#e2e8f0 !important;
-  border-top:1px dashed #334155 !important;
-  margin-top:8px !important; padding-top:8px !important;
-}
-.swagger-ui .prop-type{ color:#38bdf8 !important; }   /* sky-400 */
-.swagger-ui .prop-name{ color:#a5b4fc !important; }   /* indigo-300 */
-.swagger-ui section.models .prop-format,
-.swagger-ui section.models .prop-enum,
-.swagger-ui section.models .prop-default{
-  background:#0b1220 !important;
-  color:#cbd5e1 !important;
-  border:1px solid #334155 !important;
-  border-radius:6px !important;
-}
-
-/* ===== Chevrons / flechas (arriba y Schemas) más visibles ===== */
-.swagger-ui .opblock-summary .opblock-summary-control svg,
-.swagger-ui section.models .models-control svg,
-.swagger-ui section.models .model-box .model-title svg{
-  fill:#22d3ee !important;
-  opacity:.95 !important;
-  filter: drop-shadow(0 0 4px rgba(34,211,238,.25));
-}
-
-/* ===== Líneas horizontales de separación dentro de Schemas ===== */
-.swagger-ui section.models .model-box + .model-box{
-  border-top:1px solid #334155 !important;
-}
-
-/* ===== Scrollbars (solo en Schemas) ===== */
-.swagger-ui section.models ::-webkit-scrollbar{ width:8px; height:8px; }
-.swagger-ui section.models ::-webkit-scrollbar-track{ background:transparent; }
-.swagger-ui section.models ::-webkit-scrollbar-thumb{ background:#475569; border-radius:4px; }
-.swagger-ui section.models ::-webkit-scrollbar-thumb:hover{ background:#22d3ee; }
-/* Píldoras de Schemas con acento y texto negro */
-.swagger-ui section.models .model-box .model-title .model-toggle,
-.swagger-ui section.models .model-box .model-title .model-title__badge,
-.swagger-ui section.models .model-box .model-title > span {
-  background: linear-gradient(90deg,#22d3ee,#06b6d4) !important;
-  color:#0b1220 !important; /* negro */
-  border:1px solid #0891b2 !important;
-  border-radius:6px !important;
-  font-weight:800 !important;
-  text-shadow: 0 1px 0 rgba(255,255,255,.25) !important;
-}
-
-/* Barra “Schemas” con más presencia */
-.swagger-ui section.models > .models-control{
-  border-width: 2px !important;
-}
-/* === Schemas: barra y panel === */
-.swagger-ui section.models{
-  background: linear-gradient(180deg,#0a1220 0%,#0e1628 100%) !important;
-  border: 1px solid #1e293b !important;
-  border-radius: 12px !important;
-}
-.swagger-ui section.models > .models-control{
-  background: rgba(2,6,23,.65) !important;
-  border: 1px solid #233044 !important;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.03), 0 6px 14px rgba(2,8,23,.35) !important;
-  border-radius: 10px !important;
-}
-
-/* Cada fila de modelo */
-.swagger-ui .model-container,
-.swagger-ui .model-box{
-  background: rgba(2,6,23,.35) !important;
-  border: 1px solid #1f2a3b !important;
-  border-radius: 10px !important;
-}
-
-/* Píldoras de título (nombre, Expand, object) con texto NEGRO */
-.swagger-ui .model-box .model-title > span,
-.swagger-ui .model-box .model-title .model-toggle,
-.swagger-ui .model-box .model-title .model-title__badge,
-.swagger-ui .model-box .model-title .model-hint{
-  background:#f1f5f9 !important;
-  color:#0b1220 !important;
-  border:1px solid #94a3b8 !important;
-  border-radius:6px !important;
-  font-weight:700 !important;
-}
-
-/* Carchetas/flechas más visibles (endpoints y schemas) */
-.swagger-ui .opblock .opblock-summary-control .arrow,
-.swagger-ui .models-control .models-control__arrow{
-  filter: brightness(1.8) saturate(1.2) !important;
-}
-
-/* Separadores más marcados en bloques y schemas */
+/* ELIMINAR fondos y sombras que tapen el canvas */
+.swagger-ui .wrapper,
+.swagger-ui .info,
+.swagger-ui .scheme-container,
+.swagger-ui .opblock-tag-section,
 .swagger-ui .opblock,
-.swagger-ui .model-box{
-  box-shadow: 0 0 0 1px rgba(14,23,42,.6), 0 1px 0 rgba(255,255,255,.03) inset !important;
+.swagger-ui .opblock .opblock-section-header,
+.swagger-ui .opblock-description-wrapper,
+.swagger-ui .responses-wrapper,
+.swagger-ui .model,
+.swagger-ui .models,
+.swagger-ui .response,
+.swagger-ui .topbar {
+  background: transparent !important;
+  box-shadow: none !important;
+  border: 0 !important;
 }
 
-/* Botón “Expandir/Colapsar todo”: texto negro */
-#qa-expand-toggle{ color:#0b1220 !important; background:#22d3ee !important; }
-/* Botones primarios: Try it out / Execute */
-.swagger-ui .btn.try-out,
-.swagger-ui .btn.execute{
-  background:#22d3ee !important;
-  color:#0b1220 !important;
-  border:1px solid #0891b2 !important;
-  font-weight:700 !important;
-  border-radius:10px !important;
-  box-shadow:0 6px 14px rgba(2,8,23,.35) !important;
-}
-.swagger-ui .btn.try-out:hover,
-.swagger-ui .btn.execute:hover{
-  filter:brightness(1.05);
-  box-shadow:0 0 0 2px rgba(34,211,238,.25) inset, 0 8px 18px rgba(2,8,23,.45) !important;
+/* Tarjeta del SUMMARY con solo borde neón y transparencia total */
+.swagger-ui .opblock-summary {
+  background: transparent !important;
+  border: 1px solid rgba(34,211,238,.45) !important;
+  border-radius: 14px !important;
+  box-shadow:
+    0 0 0 1px rgba(14,165,183,.22),
+    0 0 22px rgba(34,211,238,.18),
+    inset 0 0 28px rgba(2,132,199,.08) !important;
 }
 
-/* Bloques de ejemplo/JSON y preformateados */
-.swagger-ui .highlight-code,
-.swagger-ui .microlight,
-.swagger-ui pre{
-  background:#0b1220 !important;
-  color:#e2e8f0 !important;
-  border:1px solid #1e293b !important;
-  border-radius:10px !important;
+/* Cuando se despliega, mantener estilo sin ladrillos */
+.swagger-ui .opblock.is-open .opblock-body {
+  background: transparent !important;
+  border: 1px solid rgba(34,211,238,.18);
+  border-radius: 12px;
+  padding: 12px 14px;
 }
 
-/* Un puntito más de contraste en filas de Schemas */
-.swagger-ui .model-box{
-  background:rgba(2,6,23,.42) !important;
-  border:1px solid #203046 !important;
+/* Texto más intenso y ligero resplandor */
+.swagger-ui .opblock-summary-path,
+.swagger-ui .opblock-summary-description,
+.swagger-ui .opblock-tag,
+.swagger-ui .model-title,
+.swagger-ui .response-col_status,
+.swagger-ui .info .title {
+  color: var(--txt) !important;
+  text-shadow: 0 0 6px rgba(34,211,238,.18);
 }
+
+/* Etiquetas de estado */
+.swagger-ui .response-col_status { font-weight: 700; color:#7dd3fc !important; }
+
+/* Inputs y selects translúcidos (sin tapar) */
+.swagger-ui input,.swagger-ui select,.swagger-ui textarea{
+  background: rgba(15,23,42,.35) !important;
+  border:1px solid rgba(34,211,238,.25) !important;
+  color:var(--txt) !important;
+  border-radius:10px;
+}
+
+/* Botones GET/POST con cápsula neón */
+.opblock .opblock-summary-method{border-radius:10px}
+.opblock.opblock-get .opblock-summary-method{
+  background: var(--primary) !important; color:#002b36 !important;
+  box-shadow: 0 0 14px rgba(34,211,238,.45);
+}
+.opblock.opblock-post .opblock-summary-method{
+  background: var(--success) !important; color:#052e16 !important;
+  box-shadow: 0 0 14px rgba(52,211,153,.35);
+}
+
+/* Modelos/tabla de respuestas con filo neón y transparencia */
+.swagger-ui .models .model-container,
+.swagger-ui .responses-table {
+  background: transparent !important;
+  border: 1px solid rgba(34,211,238,.22);
+  border-radius: 12px;
+  box-shadow: 0 0 18px rgba(34,211,238,.12);
+}
+
+/* Botón Expandir/Colapsar */
+.btn{
+  position:fixed; right:18px; top:14px; z-index:9;
+  padding:10px 16px; border-radius:12px; font-weight:800;
+  background: rgba(2,6,23,.45); color:#d7eef7; border:1px solid rgba(34,211,238,.35);
+  box-shadow: 0 0 22px rgba(34,211,238,.22);
+  backdrop-filter: blur(8px);
+}
+.btn:hover{transform:translateY(-1px); box-shadow:0 0 32px rgba(34,211,238,.3);}
+
+/* Footer licencia abajo-izquierda (visible pero discreto) */
+footer{
+  position:fixed !important; left:14px !important; bottom:10px !important;
+  right:auto !important; opacity:.85; color:#cfeefe;
+  font:12px/1.4 ui-sans-serif,system-ui,Segoe UI,Roboto,Ubuntu;
+  text-shadow:0 0 6px rgba(34,211,238,.25);
+  pointer-events:none;
+}
+
+/* =========================
+   SCHEMAS (modelos abajo)
+   ========================= */
+
+/* Contenedor principal */
+.swagger-ui .models {
+  background: transparent !important;
+  border: 1px solid rgba(34,211,238,.25);
+  border-radius: 12px;
+  box-shadow:
+    0 0 0 1px rgba(14,165,183,.18),
+    0 0 20px rgba(34,211,238,.18),
+    inset 0 0 24px rgba(2,132,199,.05) !important;
+  margin-top: 20px;
+  padding: 12px;
+}
+
+/* Cada modelo individual */
+.swagger-ui .model-container {
+  background: transparent !important;
+  border: 1px solid rgba(34,211,238,.18);
+  border-radius: 10px;
+  margin: 8px 0;
+  padding: 10px;
+  box-shadow: 0 0 14px rgba(34,211,238,.12);
+}
+
+/* Títulos de los modelos (ej: Quote, ValidationError) */
+.swagger-ui .model-title {
+  color: #e6f6ff !important;
+  font-weight: 700;
+  text-shadow: 0 0 6px rgba(34,211,238,.25);
+}
+
+/* Botón expandir dentro de schemas */
+.swagger-ui .model-toggle {
+  background: rgba(2,6,23,.35) !important;
+  border: 1px solid rgba(34,211,238,.25);
+  border-radius: 8px;
+  padding: 3px 8px;
+  color: #7dd3fc !important;
+  font-weight: 600;
+  box-shadow: 0 0 12px rgba(34,211,238,.18);
+}
+.swagger-ui .model-toggle:hover {
+  background: rgba(2,6,23,.6) !important;
+  box-shadow: 0 0 18px rgba(34,211,238,.28);
+}
+
+/* =========================
+   UNIFICAR BOTONES DE SCHEMAS
+   ========================= */
+
+/* Botones (Expand/Collapse en Schemas) */
+.swagger-ui .model-box-control,
+.swagger-ui .model-toggle,
+.swagger-ui .model-title__toggle {
+  background: rgba(2,6,23,.6) !important;       /* igual que menús arriba */
+  border: 1px solid rgba(34,211,238,.35) !important;
+  border-radius: 6px;
+  padding: 2px 8px;
+  color: #7dd3fc !important;                    /* turquesa suave */
+  font-weight: 600;
+  text-shadow: 0 0 6px rgba(34,211,238,.35);
+  box-shadow: 0 0 10px rgba(34,211,238,.18);
+}
+
+/* Hover en botones Schemas */
+.swagger-ui .model-box-control:hover,
+.swagger-ui .model-toggle:hover,
+.swagger-ui .model-title__toggle:hover {
+  background: rgba(2,6,23,.8) !important;
+  box-shadow: 0 0 16px rgba(34,211,238,.35);
+  color: #a5f3fc !important;
+}
+
+/* Labels de propiedades dentro de Schemas */
+.swagger-ui .model .property-name,
+.swagger-ui .model .model-title__text {
+  color: #e0faff !important;
+  font-weight: 500;
+  text-shadow: 0 0 4px rgba(34,211,238,.3);
+}
+
+/* Requeridos (rojo) → más elegante */
+.swagger-ui .model .property. required .property-name {
+  color: #f87171 !important; /* rojo elegante */
+  text-shadow: none;
+}
+

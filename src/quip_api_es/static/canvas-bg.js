@@ -1,62 +1,54 @@
-(() => {
-  const c = document.getElementById('bg');
-  if (!c) return;
-  const ctx = c.getContext('2d');
-  const DPR = Math.max(1, window.devicePixelRatio || 1);
+;(() => {
+  const ROOT = document.getElementById('bg') || (() => {
+    const d=document.createElement('div'); d.id='bg'; document.body.appendChild(d); return d;
+  })();
+  const cvs = document.createElement('canvas'); ROOT.appendChild(cvs);
+  const ctx = cvs.getContext('2d');
+  const DPR = Math.min(window.devicePixelRatio || 1, 2);
+  let W=0,H=0;
+  function resize(){ W=cvs.width=Math.floor(innerWidth*DPR); H=cvs.height=Math.floor(innerHeight*DPR);
+    cvs.style.width=innerWidth+'px'; cvs.style.height=innerHeight+'px'; }
+  addEventListener('resize',resize,{passive:true}); resize();
 
-  function resize(){
-    const { innerWidth:w, innerHeight:h } = window;
-    c.width = w * DPR;
-    c.height = h * DPR;
-    c.style.width = w + 'px';
-    c.style.height = h + 'px';
-  }
-  window.addEventListener('resize', resize); resize();
+  const CFG={ dots: Math.round((innerWidth*innerHeight)/15000),
+    radius: 1.1*DPR, maxDist: 170*DPR, lineWidth: 0.35*DPR,
+    lineAlpha:.34, dotAlpha:.52, glow:5,
+    color1:'34,211,238', color2:'56,189,248', parallax:.02 };
 
-  const N = 80;
-  const rnd = (n=1)=>Math.random()*n;
-  const particles = Array.from({length:N}, ()=>({
-    x: rnd(c.width), y: rnd(c.height),
-    vx: (Math.random()-0.5)*0.25*DPR,
-    vy: (Math.random()-0.5)*0.25*DPR
-  }));
+  const R=(a,b)=>a+Math.random()*(b-a), pts=[];
+  for(let i=0;i<CFG.dots;i++) pts.push({x:R(0,W),y:R(0,H),vx:R(-.25,.25)*DPR,vy:R(-.25,.25)*DPR});
+  let mx=W/2,my=H/2; addEventListener('mousemove',e=>{mx=(e.clientX||0)*DPR;my=(e.clientY||0)*DPR;},{passive:true});
 
-  function frame(){
-    ctx.clearRect(0,0,c.width,c.height);
+  function tick(){
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle='rgba(2,6,23,0.86)'; ctx.fillRect(0,0,W,H);
 
-    // Radial glow suave
-    const g = ctx.createRadialGradient(c.width*0.7, c.height*0.3, 0, c.width*0.7, c.height*0.3, Math.max(c.width,c.height)*0.8);
-    g.addColorStop(0, 'rgba(34,211,238,0.07)');
-    g.addColorStop(1, 'rgba(2,6,23,0.25)');
-    ctx.fillStyle = g;
-    ctx.fillRect(0,0,c.width,c.height);
-
-    // Actualiza partículas
-    for (const p of particles){
-      p.x += p.vx; p.y += p.vy;
-      if (p.x < 0 || p.x > c.width) p.vx *= -1;
-      if (p.y < 0 || p.y > c.height) p.vy *= -1;
+    // puntos brillantes
+    ctx.save(); ctx.shadowColor=`rgba(${CFG.color1},.35)`; ctx.shadowBlur=CFG.glow;
+    for(const p of pts){
+      p.x += p.vx + (mx-W/2)*CFG.parallax*1e-4;
+      p.y += p.vy + (my-H/2)*CFG.parallax*1e-4;
+      if(p.x<-40||p.x>W+40) p.vx*=-1; if(p.y<-40||p.y>H+40) p.vy*=-1;
+      ctx.beginPath(); ctx.globalAlpha=CFG.dotAlpha; ctx.fillStyle=`rgba(${CFG.color1},1)`;
+      ctx.arc(p.x,p.y,CFG.radius,0,Math.PI*2); ctx.fill();
     }
+    ctx.restore();
 
-    // Conecta cercanas
-    for (let i=0;i<N;i++){
-      for (let j=i+1;j<N;j++){
-        const a=particles[i], b=particles[j];
-        const dx=a.x-b.x, dy=a.y-b.y; const d=Math.hypot(dx,dy);
-        const R=120*DPR;
-        if (d<R){
-          ctx.strokeStyle = `rgba(34,211,238,${(1 - d/R)*0.25})`;
-          ctx.lineWidth = DPR*0.6;
-          ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke();
+    // conexiones ultra finas con degradado y alpha sutil
+    ctx.lineWidth=CFG.lineWidth; ctx.globalAlpha=CFG.lineAlpha;
+    for(let i=0;i<pts.length;i++){ const a=pts[i];
+      for(let j=i+1;j<pts.length;j++){ const b=pts[j];
+        const dx=a.x-b.x, dy=a.y-b.y, d=Math.hypot(dx,dy);
+        if(d<CFG.maxDist){
+          const t=1-d/CFG.maxDist;
+          const g=ctx.createLinearGradient(a.x,a.y,b.x,b.y);
+          g.addColorStop(0,`rgba(${CFG.color1},${0.18+.45*t})`);
+          g.addColorStop(1,`rgba(${CFG.color2},${0.18+.45*t})`);
+          ctx.strokeStyle=g; ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke();
         }
       }
     }
-
-    // Dots
-    ctx.fillStyle='rgba(226,232,240,0.9)';
-    for (const p of particles){ ctx.beginPath(); ctx.arc(p.x,p.y,1.2*DPR,0,Math.PI*2); ctx.fill(); }
-
-    requestAnimationFrame(frame);
+    requestAnimationFrame(tick);
   }
-  requestAnimationFrame(frame);
+  tick();
 })();

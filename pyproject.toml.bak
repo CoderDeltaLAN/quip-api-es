@@ -33,13 +33,11 @@ build-backend = "poetry.core.masonry.api"
 
 # ----- Herramientas -----
 [tool.ruff]
-target-version = "py311"
 line-length = 100
-
-[tool.ruff.lint]
-select = ["E", "F", "I"]
-ignore = ["E501"]
-
+target-version = "py312"
+select = ["E","F","I","B","UP","N","SIM"]
+ignore = ["E501"]  # long lines las gestiona Black
+exclude = ["venv",".venv","build","dist"]
 
 [tool.black]
 line-length = 100
