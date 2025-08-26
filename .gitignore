@@ -41,3 +41,6 @@ data/
 datasets/
 outputs/
 tmp/
+
+.env
+!/.env.example
