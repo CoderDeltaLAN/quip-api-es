@@ -43,3 +43,4 @@ outputs/
 tmp/
 
 .env
+!/.env.example
