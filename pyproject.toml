@@ -36,8 +36,6 @@ build-backend = "poetry.core.masonry.api"
 [tool.ruff]
 line-length = 100
 target-version = "py312"
-extend-select = ["E","F","W","I","UP","B","Q"]
-ignore = ["E501"]
 
 [tool.ruff.lint.isort]
 known-first-party = ["quip_api_es"]
@@ -50,3 +48,6 @@ target-version = ["py312"]
 addopts = "-q"
 pythonpath = ["src"]
 testpaths = ["tests"]
+[tool.ruff.lint]
+extend-select = ["E","F","W","I","UP","B","Q"]
+ignore = ["E501"]
