@@ -41,3 +41,5 @@ data/
 datasets/
 outputs/
 tmp/
+
+.env

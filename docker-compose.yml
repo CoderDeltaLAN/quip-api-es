@@ -3,8 +3,7 @@ services:
     image: quip-api-es:local
     container_name: quip-api-es
     network_mode: host
-    environment:
-      QUIP_API_SUBMIT_TOKEN: "dev-token"
+    env_file: .env
     volumes:
       - ./src/data:/app/src/data
     command: >
