@@ -3,8 +3,8 @@ from __future__ import annotations
 import json
 import os
 import uuid
+from collections.abc import Iterable
 from pathlib import Path
-from typing import Iterable
 
 from fastapi import Depends, FastAPI, Header, HTTPException, Query, status
 from fastapi.staticfiles import StaticFiles
@@ -57,6 +57,7 @@ DATASET: list[dict[str, str]] = [
         "categoria": "citas",
     },
 ]
+
 
 # ========= Modelos =========
 class Submission(BaseModel):
@@ -176,7 +177,9 @@ def submit(item: Submission, _: None = Depends(require_bearer_token)) -> dict:
         write_pending(PENDING_STORAGE, pending)
         return {"status": "pending", "id": rec["id"], "ok": True, "pending_count": len(pending)}
     except ValidationError as ve:
-        raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail=str(ve)) from ve
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail=str(ve)
+        ) from ve
     except HTTPException:
         # Re-lanzar HTTPException tal cual
         raise
