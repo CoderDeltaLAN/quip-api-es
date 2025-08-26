@@ -27,3 +27,5 @@ USER appuser
 
 EXPOSE 8000
 CMD ["uvicorn", "quip_api_es.app:app", "--host", "0.0.0.0", "--port", "8000"]
+
+ENV PENDING_STORAGE=/app/src/data/pending_submissions.json
