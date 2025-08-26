@@ -2,10 +2,13 @@ services:
   api:
     image: quip-api-es:local
     container_name: quip-api-es
-    ports:
-      - "127.0.0.1:8080:8000"
+    network_mode: host
     environment:
       QUIP_API_SUBMIT_TOKEN: "dev-token"
     volumes:
       - ./src/data:/app/src/data
+    command: >
+      uvicorn quip_api_es.app:app
+      --host 127.0.0.1
+      --port 8080
     restart: unless-stopped
