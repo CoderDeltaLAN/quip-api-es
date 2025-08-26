@@ -3,15 +3,23 @@ FROM python:3.12-slim
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
-    PIP_NO_CACHE_DIR=1
+    PIP_NO_CACHE_DIR=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    PIP_DEFAULT_TIMEOUT=60
 
 WORKDIR /app
 
-# Dependencias del proyecto (pip construye con poetry-core del pyproject)
+# Archivos de build (evitamos copiar todo)
 COPY pyproject.toml README.md ./
+# Preinstala toolchain de build y poetry-core para evitar aislamiento que baja deps en caliente
+RUN python -m pip install --upgrade pip setuptools wheel \
+ && python -m pip install "poetry-core>=1.8.0"
+
+# Código
 COPY src ./src
 
-RUN python -m pip install --upgrade pip && pip install .
+# Instala el paquete (ya con build backend presente)
+RUN pip install --no-build-isolation .
 
 # Usuario no root
 RUN useradd -u 10001 -m appuser

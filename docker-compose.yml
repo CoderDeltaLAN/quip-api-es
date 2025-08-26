@@ -1,0 +1,11 @@
+services:
+  api:
+    image: quip-api-es:local
+    container_name: quip-api-es
+    ports:
+      - "127.0.0.1:8080:8000"
+    environment:
+      QUIP_API_SUBMIT_TOKEN: "dev-token"
+    volumes:
+      - ./src/data:/app/src/data
+    restart: unless-stopped
