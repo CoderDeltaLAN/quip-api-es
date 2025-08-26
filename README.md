@@ -1,3 +1,5 @@
+![CI](https://github.com/CoderDeltaLAN/quip-api-es/actions/workflows/ci.yml/badge.svg?branch=main)
+
 # quip-api-es
 
 [![CI](https://github.com/CoderDeltaLAN/quip-api-es/actions/workflows/ci.yml/badge.svg)](https://github.com/CoderDeltaLAN/quip-api-es/actions/workflows/ci.yml)
