@@ -25,3 +25,5 @@ poetry run uvicorn quip_api_es.app:app --reload
 
 
 ![CI](https://github.com/CoderDeltaLAN/quip-api-es/actions/workflows/ci-python.yml/badge.svg)
+
+![CI](https://github.com/CoderDeltaLAN/quip-api-es/actions/workflows/ci.yml/badge.svg?branch=main)

@@ -1,6 +1,8 @@
 .RECIPEPREFIX := >
 SHELL := /bin/bash
 
+.PHONY: up down restart logs ps build rebuild wait smoke clean reset-pending show-pending
+
 up:
 > docker compose up -d
 
@@ -41,6 +43,12 @@ smoke: wait
 >     -H "Content-Type: application/json" \
 >     -H "Authorization: Bearer $$QUIP_API_SUBMIT_TOKEN" \
 >     -d "{\"texto\":\"Smoke test desde Makefile\"}"'
+
+reset-pending:
+> docker exec quip-api-es sh -lc 'printf "[]\n" > "$$PENDING_STORAGE" && echo "Reset OK" && ls -l "$$PENDING_STORAGE" && tail -n +1 "$$PENDING_STORAGE"'
+
+show-pending:
+> docker exec -i quip-api-es python -c 'import os, pathlib; p=pathlib.Path(os.getenv("PENDING_STORAGE")); print("Archivo:", p); print("Contenido:"); print(p.read_text("utf-8"))'
 
 clean:
 > docker compose down --remove-orphans || true
