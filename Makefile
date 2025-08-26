@@ -48,3 +48,14 @@ reset-pending:
 
 show-pending:
 	@docker exec -i quip-api-es python -c 'import os, pathlib; p=pathlib.Path(os.getenv("PENDING_STORAGE")); print("Archivo:", p); print("Contenido:"); print(p.read_text("utf-8"))'
+
+.PHONY: ci-local
+ci-local:
+	@set -e
+	$(MAKE) clean
+	$(MAKE) build
+	$(MAKE) up
+	$(MAKE) wait
+	$(MAKE) smoke
+	$(MAKE) down
+	@echo "ci-local OK"
