@@ -1,43 +1,12 @@
 name: CI (Python)
-
-on:
-  push:
-    branches: [ main, chore/**, feat/**, fix/** ]
-  pull_request:
-    branches: [ main ]
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+on: [push, pull_request]
 
 jobs:
   test:
-    name: test
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-
-      - name: Install minimal deps (para importar)
-        run: |
-          python -m pip install --upgrade pip
-          pip install "fastapi>=0.110" "pydantic>=2" "uvicorn>=0.23"
-
-      - name: Import smoke desde src
+      - uses: actions/checkout@v4
+      - name: Import smoke (src)
         env:
           PYTHONPATH: src
-        run: |
-          python - <<'PY'
-          import sys
-          sys.path.insert(0, "src")
-          import quip_api_es  # debe poder importarse
-          import fastapi
-          print("import ok")
-          PY
+        run: python -c "import quip_api_es, fastapi; print('import ok')"
