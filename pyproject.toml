@@ -32,14 +32,15 @@ requires = ["poetry-core>=1.8.0"]
 build-backend = "poetry.core.masonry.api"
 
 # ----- Herramientas -----
+
 [tool.ruff]
 line-length = 100
 target-version = "py312"
+extend-select = ["E","F","W","I","UP","B","Q"]
+ignore = ["E501"]
 
-[tool.ruff.lint]
-select = ["E","F","I","UP"]
-ignore = []
-fixable = ["ALL"]
+[tool.ruff.lint.isort]
+known-first-party = ["quip_api_es"]
 
 [tool.black]
 line-length = 100
@@ -47,5 +48,5 @@ target-version = ["py312"]
 
 [tool.pytest.ini_options]
 addopts = "-q"
-testpaths = ["tests"]
 pythonpath = ["src"]
+testpaths = ["tests"]
