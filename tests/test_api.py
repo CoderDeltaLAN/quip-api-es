@@ -1,4 +1,5 @@
 from fastapi.testclient import TestClient
+
 from quip_api_es.app import app
 
 client = TestClient(app)
@@ -16,6 +17,7 @@ def test_search_param_validation():
 
 def test_health():
     from fastapi.testclient import TestClient
+
     from quip_api_es.app import app
 
     client = TestClient(app)
@@ -28,6 +30,7 @@ def test_health():
 
 def test_stats():
     from fastapi.testclient import TestClient
+
     from quip_api_es.app import app
 
     client = TestClient(app)
@@ -39,6 +42,7 @@ def test_stats():
 
 def test_categories_contains_filosofia():
     from fastapi.testclient import TestClient
+
     from quip_api_es.app import app
 
     client = TestClient(app)

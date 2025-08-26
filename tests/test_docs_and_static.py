@@ -1,4 +1,5 @@
 from fastapi.testclient import TestClient
+
 from quip_api_es.app import app
 
 client = TestClient(app)
