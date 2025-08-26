@@ -2,43 +2,49 @@ name: CI (Python)
 
 on:
   push:
-    branches: [ main ]
+    branches: ['**']
   pull_request:
-    branches: [ main ]
+    branches: ['**']
   workflow_dispatch:
 
 concurrency:
-  group: ci-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+permissions:
+  contents: read
+
 jobs:
-  test-and-docker:
+  build-and-smoke:
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    permissions:
-      contents: read
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up Python 3.12
+      - name: Setup Python 3.12 + pip cache
         uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
-          cache: pip
-          cache-dependency-path: pyproject.toml
+          python-version: '3.12'
+          cache: 'pip'
 
-      - name: Install project
+      - name: Install project (wheel-friendly)
         run: |
           python -m pip install --upgrade pip setuptools wheel
           pip install --no-build-isolation .
 
-      - name: Quick import sanity
-        run: python -c "import quip_api_es, fastapi; print('import ok')"
+      - name: Import smoke (quick)
+        run: |
+          python - <<'PY'
+          import quip_api_es, fastapi
+          print("import ok")
+          PY
 
       - name: Build Docker image
-        run: DOCKER_BUILDKIT=1 docker build --network=host -t quip-api-es:ci .
+        env:
+          DOCKER_BUILDKIT: '1'
+        run: |
+          docker build -t quip-api-es:ci .
 
       - name: Run container
         env:
@@ -65,20 +71,19 @@ jobs:
         env:
           QUIP_API_SUBMIT_TOKEN: ci-token
         run: |
-          set -e
+          set -euo pipefail
           curl -fsS http://127.0.0.1:8080/health
           curl -fsS http://127.0.0.1:8080/categories
           curl -sS -X POST http://127.0.0.1:8080/submit \
             -H "Content-Type: application/json" \
             -H "Authorization: Bearer ${QUIP_API_SUBMIT_TOKEN}" \
-            -d '{"texto":"Smoke test desde CI"}' > /tmp/submit.json
-          python - <<'PY'
-import json, sys
-with open("/tmp/submit.json","r",encoding="utf-8") as f:
-    d=json.load(f)
-assert d.get("status")=="pending", d
-print("submit ok", d.get("id"))
-PY
+            -d '{"texto":"Smoke test desde CI"}' \
+          | python - <<'PY'
+          import sys,json
+          data=json.load(sys.stdin)
+          print(data)
+          assert data.get("status")=="pending", f"unexpected: {data}"
+          PY
 
       - name: Dump logs (always)
         if: always()
@@ -87,4 +92,3 @@ PY
       - name: Stop container (always)
         if: always()
         run: docker rm -f quip-api-es || true
-
