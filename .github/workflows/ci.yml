@@ -15,7 +15,7 @@ jobs:
       - name: Install project + dev tools
         run: |
           python -m pip install --upgrade pip
-          pip install ruff black pytest
+          pip install ruff black pytest httpx
           pip install .
 
       - name: Ruff (lint)
@@ -27,4 +27,11 @@ jobs:
       - name: Pytest
         env:
           PYTHONPATH: src
-        run: pytest -q
+          QUIP_API_SUBMIT_TOKEN: ci-token
+          PENDING_DIR: ${{ runner.temp }}
+          PENDING_STORAGE: ${{ runner.temp }}/pending.json
+        run: |
+          set -eux
+          mkdir -p "$PENDING_DIR"
+          echo "[]" > "$PENDING_STORAGE"
+          pytest -q
